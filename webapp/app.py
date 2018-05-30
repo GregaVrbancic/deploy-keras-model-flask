@@ -11,7 +11,7 @@ print('Loading diabetes model...')
 diabetes_model = load_model('./model/diabetes_model.h5')
 diabetes_graph = tf.get_default_graph()
 
-def predict_diabetes(features=None):
+def predict_diabetes(features):
     with diabetes_graph.as_default():
         prediction = diabetes_model.predict(np.array([features]))
         print('prediction: ', prediction[0,0])
