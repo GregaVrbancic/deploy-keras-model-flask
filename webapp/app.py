@@ -1,18 +1,27 @@
-from flask import Flask, jsonify
-from sklearn import datasets, svm
+from flask import Flask, jsonify, request
+from keras.models import load_model
+import json
+import numpy as np
+import tensorflow as tf
 
 app = Flask(__name__)
 
-# Load Dataset from scikit-learn.
-digits = datasets.load_digits()
+# Preload our diabetes model
+print('Loading diabetes model...')
+diabetes_model = load_model('./model/diabetes_model.h5')
+diabetes_graph = tf.get_default_graph()
 
-@app.route('/')
-def hello():
-    clf = svm.SVC(gamma=0.001, C=100.)
-    clf.fit(digits.data[:-1], digits.target[:-1])
-    prediction = clf.predict(digits.data[-1:])
+def predict_diabetes(features=None):
+    with diabetes_graph.as_default():
+        prediction = diabetes_model.predict(np.array([features]))
+        print('prediction: ', prediction[0,0])
+        return np.float64(prediction[0,0])
 
-    return jsonify({'prediction': repr(prediction)})
+@app.route('/diabetes/predict', methods = ['POST'])
+def predict_diabetes_ctrl():
+    features = request.get_json()['features']
+    print(features)
+    return jsonify({'prediction': predict_diabetes(features)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
