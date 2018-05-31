@@ -1,28 +1,53 @@
-# Miniconda on Heroku Example App
+# Deploy Keras model using Flask framework
 
-This repository contains two things:
+## Requirements
 
-- A `Dockerfile`, which installs [scikit-learn](http://scikit-learn.org/stable/) with [miniconda](http://conda.pydata.org/miniconda.html), and a few [pip](https://pip.pypa.io/en/stable/) dependencies.
-- A [Flask](http://flask.pocoo.org) `webapp`, which utilizes basic functionality of `scikit-learn`.
+- [Python](https://www.python.org/downloads/) >= 3.6 (should also work with version >= 2.7)
+- [pip](https://pip.pypa.io/en/stable/installing/)
+- pipenv: ```pip install pipenv```
 
-All [Anaconda packages](https://docs.continuum.io/anaconda/pkg-docs) are supported—`scikit-learn` is just being used here as an example. 
+## Installation
 
-## ☤ Advantages over [Conda Buildpack](https://github.com/kennethreitz/conda-buildpack):
+Install all the required dependencies with following command: ```pipenv shell```.
 
-- No slug size limit (Anaconda packages can be very large). 
-- Exact Miniconda environment, from Continuum Analytics.
+## Run
 
-## ☤ Deploy this Application:
+Firstly enter ```pipenv shell``` and then execute ```FLASK_DEBUG=1 FLASK_APP=app.py flask run```.
 
-Deploy with the [Container Registry and Runtime](https://devcenter.heroku.com/articles/container-registry-and-runtime):
+Test the API with following cURL command:
 
-     $ heroku plugins:install heroku-container-registry
-     $ heroku container:login
-     
-     $ git clone https://github.com/heroku-examples/python-miniconda
-     $ cd python-miniconda
-     
-     $ heroku create
-     $ heroku container:push web
+```shell
+curl -X POST \
+  http://localhost:5000/diabetes/predict \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"features": [4,148,60,27,318,30.9,0.15,79]
+}'
+```
 
-✨🍰✨
+> The feature array in cURL request represent values for:
+> - Pregnancies
+> - Glucose
+> - Blood Pressure
+> - Skin Thickness
+> - Insulin
+> - BMI
+> - Diabetes Pedigree Function
+> - Age
+
+The response should be similar to this:
+
+```json
+{
+    "prediction": 0.7101869583129883
+}
+```
+
+### Docker
+
+Build Docker image with command ```docker build -t deploy-keras-model-flask .```
+
+Run built Docker image with ```docker run --name keras-flask -p 5555:5000 deploy-keras-model-flask```.
+
+To test the API use the cURL command from above, changing the *localhost* with the *IP* and *port* with port number binded to docker host port.

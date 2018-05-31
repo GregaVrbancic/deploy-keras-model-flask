@@ -10,6 +10,6 @@ RUN pip install -qr /tmp/requirements.txt
 ADD ./webapp /opt/webapp/
 WORKDIR /opt/webapp
 
-RUN conda install scikit-learn
+# RUN conda install numpy tensorflow keras
 
-CMD gunicorn --bind 0.0.0.0:$PORT wsgi
+CMD gunicorn --bind 0.0.0.0:5000 wsgi

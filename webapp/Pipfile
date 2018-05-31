@@ -1,16 +1,11 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
 
-
-
 [packages]
-
 gunicorn = "*"
 Flask = "*"
 "Jinja2" = "*"
@@ -18,8 +13,7 @@ Werkzeug = "*"
 distribute = "*"
 Keras = "*"
 tensorflow = "*"
-
+numpy = "*"
 
 [requires]
-
 python_version = "3.6"
