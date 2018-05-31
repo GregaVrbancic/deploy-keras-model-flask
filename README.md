@@ -1,5 +1,7 @@
 # Deploy Keras model using Flask framework
 
+An example of deploying Keras model as API using Flask framework.
+
 ## Requirements
 
 - [Python](https://www.python.org/downloads/) >= 3.6 (should also work with version >= 2.7)
